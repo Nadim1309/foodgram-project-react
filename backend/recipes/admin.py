@@ -34,4 +34,3 @@ class IngredientAmountAdmin(admin.ModelAdmin):
     list_filter = ('ingredient',)
     ordering = ['ingredient',]
     empty_value_display = '-пусто-'
-
