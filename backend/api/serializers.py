@@ -3,14 +3,13 @@ from djoser.serializers import UserCreateSerializer, UserSerializer
 from recipes.models import Ingredient, Recipe, Tag
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
-from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework.validators import UniqueValidator
 from users.models import Follow
-
+from django.db.models import F
 User = get_user_model()
 
 
-class CustomAuthTokenSerializer(ModelSerializer):
+class CustomAuthTokenSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
     )
@@ -68,15 +67,22 @@ class CustomUserSerializer(UserSerializer):
         return Follow.objects.filter(user=user, author=obj.id).exists()
 
 
-class IngredientSerializer(ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
 
 
-class TagsSerializer(ModelSerializer):
+class TagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
+        fields = '__all__'
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Recipe
         fields = '__all__'
 
 

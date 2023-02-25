@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
-from recipes.models import Ingredient, Tag
+from recipes.models import Ingredient, Recipe, Tag
 from rest_framework import filters, generics, permissions, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
@@ -12,13 +12,21 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from users.models import Follow
 
-from .serializers import FollowSerializer, IngredientSerializer, TagsSerializer
+from .serializers import (FollowSerializer, IngredientSerializer,
+                          RecipeSerializer, TagsSerializer)
 
 User = get_user_model()
 
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 20
+
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all().order_by('-pub_date')
+    permission_classes = (AllowAny,)
+    serializer_class = RecipeSerializer
+    pagination_class = PageNumberPagination
 
 
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):

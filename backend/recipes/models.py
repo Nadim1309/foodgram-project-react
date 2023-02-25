@@ -59,8 +59,9 @@ class Recipe(models.Model):
         related_name='recipes',
     )
     name = models.CharField(
-        'Название рецепта',
-        max_length=180,
+        verbose_name='Название рецепта',
+        max_length=50,
+        blank=False,
     )
     image = models.ImageField(
         'Картинка для рецепта',
@@ -69,30 +70,32 @@ class Recipe(models.Model):
         null=True,
     )
     text = models.TextField(
-        'Текст описания рецепта',
+        verbose_name='Описание рецепта',
+        blank=False,
     )
     ingredients = models.ManyToManyField(
-        Ingredient,
+        'Ingredient',
         verbose_name='Ингредиенты',
         through='IngredientAmount',
         related_name='recipes',
         blank=False,
     )
     tags = models.ManyToManyField(
-        Tag,
+        'Tag',
         verbose_name='Теги',
         related_name='recipes',
-        blank=True,
+        blank=False,
     )
     cooking_time = models.PositiveSmallIntegerField(
-        'Время приготовления',
+        default=1,
+        verbose_name='Время приготовления',
         validators=(
             MinValueValidator(
                 1, message='Время приготовления не может быть меньше минуты'),),
     )
     pub_date = models.DateTimeField(
-        'Дата публикации рецепта',
-        auto_now_add=True
+        verbose_name='Дата публикации рецепта',
+        auto_now_add=True,
     )
 
     class Meta:
@@ -105,19 +108,20 @@ class Recipe(models.Model):
 
 class IngredientAmount(models.Model):
     recipe = models.ForeignKey(
-        Recipe,
+        'Recipe',
         on_delete=models.CASCADE,
         related_name='recipe',
-        verbose_name='Рецепт'
+        verbose_name='В рецепте'
     )
     ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.CASCADE,
+        'Ingredient',
+        on_delete=models.PROTECT,
         related_name='ingradient',
         verbose_name='Ингредиент'
     )
     amount = models.PositiveSmallIntegerField(
-        'Количество ингредиента',
+        default=1,
+        verbose_name='Количество ингредиента',
         validators=(
             MinValueValidator(
                 1, message='Количество не может быть меньше 1'),),
