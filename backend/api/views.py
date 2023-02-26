@@ -1,9 +1,11 @@
-from django_filters.rest_framework import DjangoFilterBackend
+import json
+
 from api.filters import IngredientSearchFilter, RecipeFilter
-from api.permissions import (AdminOrReadOnly, AdminUserOrReadOnly,)
+from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import *
 from rest_framework import filters, permissions, status, viewsets
@@ -12,7 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 from users.models import Follow
+
 from backend.settings import PAGE_SAZE_LARGE
+
 from .serializers import *
 
 User = get_user_model()
@@ -95,9 +99,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 f'{index}. {key} - {shopping_dict[key]["amount"]} '
                 f'{shopping_dict[key]["measurement_unit"]}\n')
         filename = 'shopping_cart.txt'
+
+        file = open(filename, 'w', encoding='utf-8')
+        for key, value in shopping_dict.items():
+            file.write(
+                f'{index}. {key} - {shopping_dict[key]["amount"]} '
+                f'{shopping_dict[key]["measurement_unit"]}\n')
+        file.close()
+
         response = HttpResponse(shopping_list,
                                 content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
+
         return response
 
 
