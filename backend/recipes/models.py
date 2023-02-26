@@ -5,6 +5,46 @@ from django.db import models
 User = get_user_model()
 
 
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='favorites_user',)
+    recipe = models.ForeignKey(
+        'Recipe',
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+        related_name='favorites',)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
+        constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
+                                               name='unique_favorite')]
+
+
+class ShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь',
+        related_name='cart',)
+    recipe = models.ForeignKey(
+        'Recipe',
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+        related_name='cart',)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'В корзине'
+        constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
+                                               name='unique_cart')]
+
+
 class Ingredient(models.Model):
     name = models.CharField(
         'Название ингредиента',
@@ -21,7 +61,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
         constraints = [
             models.UniqueConstraint(fields=['name', 'measurement_unit'],
-                                    name='unique ingredient')
+                                    name='unique_ingredient')
         ]
 
     def __str__(self):
@@ -110,13 +150,13 @@ class IngredientAmount(models.Model):
     recipe = models.ForeignKey(
         'Recipe',
         on_delete=models.CASCADE,
-        related_name='recipe',
+        related_name='amount',
         verbose_name='В рецепте'
     )
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.PROTECT,
-        related_name='ingradient',
+        related_name='amount',
         verbose_name='Ингредиент'
     )
     amount = models.PositiveSmallIntegerField(
@@ -133,6 +173,6 @@ class IngredientAmount(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('ingredient', 'recipe',),
-                name='unique ingredient amount',
+                name='unique_ingredient_amount',
             ),
         )
