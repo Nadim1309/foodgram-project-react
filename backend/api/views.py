@@ -1,5 +1,3 @@
-import json
-
 from api.filters import IngredientSearchFilter, RecipeFilter
 from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from django.contrib.auth import get_user_model
@@ -8,22 +6,20 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from recipes.models import *
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 from users.models import Follow
 
-from backend.settings import PAGE_SAZE_LARGE
-
 from .serializers import *
 
 User = get_user_model()
 
 
-class LargeResultsSetPagination(PageNumberPagination):
-    page_size = PAGE_SAZE_LARGE
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size_query_param = 'limit'
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -31,7 +27,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = [AdminUserOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_class = RecipeFilter
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPageNumberPagination
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
@@ -118,14 +114,12 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Tag.objects.all()
     serializer_class = TagsSerializer
-    pagination_class = LargeResultsSetPagination
 
 
 class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    pagination_class = LargeResultsSetPagination
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
 

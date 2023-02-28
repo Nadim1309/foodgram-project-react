@@ -12,9 +12,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PAGE_SAZE_NORMAL = 3
+PAGE_SAZE_NORMAL = 6
 PAGE_SAZE_LARGE = 20
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +30,7 @@ SECRET_KEY = 'django-insecure-gm$5+*kwrc*h0e#1jh4&indh-g!@eoeej@eg&4qxy(-tcb1akb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'django_filters',
     'rest_framework.authtoken',
     'djoser',
@@ -51,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -83,7 +89,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+# DATABASES = {
+#    'default': {
+#        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+#        'NAME': os.getenv('DB_NAME', 'postgres'),
+#        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+#        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+#       'HOST': os.getenv('DB_HOST', 'localhost'),
+#        'PORT': os.getenv('DB_PORT', '5432')
+#    }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -146,8 +161,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': PAGE_SAZE_NORMAL,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': PAGE_SAZE_NORMAL,
 }
 
 DJOSER = {
@@ -163,3 +178,7 @@ DJOSER = {
         'user_list': ('rest_framework.permissions.AllowAny',)
     }
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_URLS_REGEX = r'^/api/.*$'
