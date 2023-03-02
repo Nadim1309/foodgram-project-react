@@ -1,5 +1,6 @@
 from api.filters import IngredientSearchFilter, RecipeFilter
 from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
+from django.db.models import BooleanField, Exists, OuterRef, Value
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -19,58 +20,80 @@ User = get_user_model()
 
 
 class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 6
     page_size_query_param = 'limit'
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    permission_classes = [AdminUserOrReadOnly]
-    filter_backends = [DjangoFilterBackend]
+    permission_classes = [AdminUserOrReadOnly,]
     filterset_class = RecipeFilter
     pagination_class = CustomPageNumberPagination
 
     def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
+        if self.request.method in SAFE_METHODS:
             return RecipeReadSerializer
         return RecipeWriteSerializer
 
-    @staticmethod
-    def post_method_for_actions(request, pk, serializers):
-        data = {'user': request.user.id, 'recipe': pk}
-        serializer = serializers(data=data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-    @staticmethod
-    def delete_method_for_actions(request, pk, model):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=pk)
-        model_obj = get_object_or_404(model, user=user, recipe=recipe)
-        model_obj.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Recipe.objects.all()
 
-    @action(detail=True, methods=["POST"],
+        if user.is_authenticated:
+            queryset = queryset.annotate(
+                is_favorited=Exists(Favorite.objects.filter(
+                    user=user, recipe__pk=OuterRef('pk'))
+                ),
+                is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
+                    user=user, recipe__pk=OuterRef('pk'))
+                )
+            )
+        else:
+            queryset = queryset.annotate(
+                is_favorited=Value(False, output_field=BooleanField()),
+                is_in_shopping_cart=Value(False, output_field=BooleanField())
+            )
+        return queryset
+
+    @action(detail=True, methods=['post'],
             permission_classes=[IsAuthenticated])
-    def favorite(self, request, pk):
-        return self.post_method_for_actions(
-            request=request, pk=pk, serializers=FavoriteSerializer)
+    def favorite(self, request, pk=None):
+        return self.add_obj(Favorite, request.user, pk)
 
     @favorite.mapping.delete
-    def delete_favorite(self, request, pk):
-        return self.delete_method_for_actions(
-            request=request, pk=pk, model=Favorite)
+    def del_from_favorite(self, request, pk=None):
+        return self.delete_obj(Favorite, request.user, pk)
 
-    @action(detail=True, methods=["POST"],
+    @action(detail=True, methods=['post'],
             permission_classes=[IsAuthenticated])
-    def shopping_cart(self, request, pk):
-        return self.post_method_for_actions(
-            request=request, pk=pk, serializers=ShoppingCartSerializer)
+    def shopping_cart(self, request, pk=None):
+        return self.add_obj(ShoppingCart, request.user, pk)
 
     @shopping_cart.mapping.delete
-    def delete_shopping_cart(self, request, pk):
-        return self.delete_method_for_actions(
-            request=request, pk=pk, model=ShoppingCart)
+    def del_from_shopping_cart(self, request, pk=None):
+        return self.delete_obj(ShoppingCart, request.user, pk)
+
+    def add_obj(self, model, user, pk):
+        if model.objects.filter(user=user, recipe__id=pk).exists():
+            return Response({
+                'errors': 'Ошибка добавления рецепта в список'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        recipe = get_object_or_404(Recipe, id=pk)
+        model.objects.create(user=user, recipe=recipe)
+        serializer = RecipeSerializer(recipe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete_obj(self, model, user, pk):
+        obj = model.objects.filter(user=user, recipe__id=pk)
+        if obj.exists():
+            obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({
+            'errors': 'Ошибка удаления рецепта из списка'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         detail=False, methods=['get'], permission_classes=[IsAuthenticated])
@@ -125,7 +148,7 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FollowViewSet(UserViewSet):
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPageNumberPagination
 
     @ action(
         methods=['post', 'delete'],

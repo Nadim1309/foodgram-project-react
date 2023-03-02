@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #        'NAME': os.getenv('DB_NAME', 'postgres'),
 #        'USER': os.getenv('POSTGRES_USER', 'postgres'),
 #        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-#       'HOST': os.getenv('DB_HOST', 'localhost'),
+#        'HOST': os.getenv('DB_HOST', 'localhost'),
 #        'PORT': os.getenv('DB_PORT', '5432')
 #    }
 # }
@@ -158,11 +158,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
 
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': PAGE_SAZE_NORMAL,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 DJOSER = {

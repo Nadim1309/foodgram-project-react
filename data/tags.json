@@ -1,0 +1,27 @@
+[
+    {
+        "name": "завтрак",
+        "color": "#FF00FF",
+        "slug": "breakfast"
+    },
+    {
+        "name": "ЗОЖ",
+        "color": "#00FFFF",
+        "slug": "zog"
+    },
+    {
+        "name": "напитки",
+        "color": "#FF0000",
+        "slug": "drinks"
+    },
+    {
+        "name": "обед",
+        "color": "#FFD700",
+        "slug": "lunch"
+    },
+    {
+        "name": "ужин",
+        "color": "#00FA9A",
+        "slug": "dinner"
+    }
+]
