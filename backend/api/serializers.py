@@ -11,22 +11,6 @@ from users.models import Follow
 User = get_user_model()
 
 
-class CustomAuthTokenSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True,
-    )
-
-    class Meta:
-        model = User
-        fields = ("email", "password")
-
-    def validate(self, attrs):
-        user = get_object_or_404(User, email=attrs["email"])
-        if not user.check_password(attrs["password"]):
-            raise serializers.ValidationError({"password": "Неверный пароль."})
-        return attrs
-
-
 class CustomUserCreateSerializer(UserCreateSerializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())])
@@ -113,19 +97,6 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     def get_ingredients(self, obj):
         queryset = IngredientAmount.objects.filter(recipe=obj)
         return IngredientAmountSerializer(queryset, many=True).data
-
-    def get_is_favorited(self, obj):
-        request = self.context.get('request')
-        if not request or request.user.is_anonymous:
-            return False
-        return Favorite.objects.filter(user=request.user, recipe=obj).exists()
-
-    def get_is_in_shopping_cart(self, obj):
-        request = self.context.get('request')
-        if not request or request.user.is_anonymous:
-            return False
-        return ShoppingCart.objects.filter(
-            user=request.user, recipe=obj).exists()
 
 
 class AddIngredientSerializer(serializers.ModelSerializer):

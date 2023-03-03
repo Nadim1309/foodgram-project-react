@@ -36,11 +36,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return RecipeWriteSerializer
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save()
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Recipe.objects.all()
+        queryset = Recipe.objects.prefetch_related(
+            'author', 'tags', 'ingredients')
 
         if user.is_authenticated:
             queryset = queryset.annotate(
@@ -50,11 +51,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 is_in_shopping_cart=Exists(ShoppingCart.objects.filter(
                     user=user, recipe__pk=OuterRef('pk'))
                 )
-            )
-        else:
-            queryset = queryset.annotate(
-                is_favorited=Value(False, output_field=BooleanField()),
-                is_in_shopping_cart=Value(False, output_field=BooleanField())
             )
         return queryset
 
