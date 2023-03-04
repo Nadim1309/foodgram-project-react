@@ -1,6 +1,6 @@
 from api.filters import IngredientSearchFilter, RecipeFilter
 from api.permissions import AdminOrReadOnly, AdminUserOrReadOnly
-from django.db.models import BooleanField, Exists, OuterRef, Value
+from django.db.models import Exists, OuterRef
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -40,8 +40,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Recipe.objects.prefetch_related(
-            'author', 'tags', 'ingredients')
+        queryset = Recipe.objects.select_related(
+            'author').prefetch_related('tags', 'ingredients')
 
         if user.is_authenticated:
             queryset = queryset.annotate(
