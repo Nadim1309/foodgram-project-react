@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Build paths inside the project like  this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PAGE_SAZE_NORMAL = 6
 PAGE_SAZE_LARGE = 20
@@ -30,8 +30,7 @@ SECRET_KEY = 'django-insecure-gm$5+*kwrc*h0e#1jh4&indh-g!@eoeej@eg&4qxy(-tcb1akb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['158.160.6.133', 'localhost', '127.0.0.1', '[::1]',]
-
+ALLOWED_HOSTS = ['*']
 
 if DEBUG:
     import socket  # only if you haven't already imported this
@@ -187,13 +186,7 @@ DJOSER = {
     }
 }
 
-CORS_ALLOWED_ORIGINS = [
-    'http://158.160.6.133',
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://[::1]',
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_URLS_REGEX = [r'^/api/.*$',
-                   r'^/admin/.*$',
-                   r'^/swagger/.*$']
+                   r'^/admin/.*$',]
