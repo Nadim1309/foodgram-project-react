@@ -43,14 +43,14 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: nadim13/foodgram_frontend:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
       - name: Push backend to Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: nadim13/foodgram_backend:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
          
   deploy:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
@@ -65,7 +65,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          sudo docker pull nadim13/foodgram_backend
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
           sudo docker-compose stop
           sudo docker-compose rm backend -f
           rm .env -f
