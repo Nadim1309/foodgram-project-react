@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure-gm$5+*kwrc*h0e#1jh4&indh-g!@eoeej@eg&4qxy(-tcb1akb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['158.160.6.133', 'localhost', '127.0.0.1', '[::1]',]
+
 
 if DEBUG:
     import socket  # only if you haven't already imported this
@@ -186,7 +187,13 @@ DJOSER = {
     }
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'http://158.160.6.133',
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://[::1]',
+]
 
 CORS_URLS_REGEX = [r'^/api/.*$',
-                   r'^/admin/.*$',]
+                   r'^/admin/.*$',
+                   r'^/swagger/.*$']
