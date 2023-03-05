@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PAGE_SAZE_NORMAL = 6
 PAGE_SAZE_LARGE = 20
 
-# Quick-start development settings - unsuitable for production
+# Quick-start development settings -  unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
