@@ -5,21 +5,26 @@ services:
     image: postgres:13.3-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
       - ./.env
 
   backend:
     image: nadim13/foodgram_backend:v1
+    expose:
+      - 8000
     restart: always
     volumes:
       - static_value:/app/backend_static/
       - media_value:/app/backend_media/
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     env_file:
-      - ./.env
+      - .env
 
   frontend:
     image: nadim13/foodgram_frontend:v1
