@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from os import environ
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -98,19 +99,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.getenv('DB_NAME', 'postgres'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432')
+        'ENGINE': environ.get('POSTGRES_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': environ.get('POSTGRES_DB', 'postgres'),
+        'USER': environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': environ.get('POSTGRES_HOST', 'db'),
+        'PORT': environ.get('POSTGRES_PORT', '5432'),
     }
 }
 # DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
+#   'default': {
+#       'ENGINE': 'django.db.backends.sqlite3',
 #       'NAME': BASE_DIR / 'db.sqlite3',
-#    }
+#   }
 # }
 
 
