@@ -70,9 +70,8 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           sudo cd infra
-          sudo docker pull nadim13/foodgram_backend:v1
           sudo docker-compose stop
-          sudo docker-compose rm backend
+          sudo docker-compose rm backend -f
           rm .env -f
           touch .env
           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
