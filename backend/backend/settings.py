@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-gm$5+*kwrc*h0e#1jh4&indh-g!@eoeej@eg&4qxy(-tcb1akb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = ['*']
 
 if DEBUG:
     import socket  # only if you haven't already imported this
