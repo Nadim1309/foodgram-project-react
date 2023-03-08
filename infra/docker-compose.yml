@@ -15,6 +15,7 @@ services:
 
   backend:
     image: nadim13/foodgram_backend:v1
+    container_name: backend
     expose:
       - 8000
     restart: always
@@ -28,6 +29,7 @@ services:
 
   frontend:
     image: nadim13/foodgram_frontend:v1
+    container_name: frontand
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
