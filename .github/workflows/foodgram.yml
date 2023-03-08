@@ -56,7 +56,7 @@ jobs:
           tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_backend:v1
          
   deploy:
-
+  
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
@@ -69,7 +69,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
-          sudo cd infra
+          sudo docker pull nadim13/foodgram_backend:v1
           sudo docker-compose stop
           sudo docker-compose rm backend -f
           rm .env -f
