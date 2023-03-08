@@ -70,7 +70,7 @@ jobs:
         script: |
           sudo docker pull nadim13/foodgram_backend:v1
           sudo docker-compose stop
-          sudo docker rm backend -f
+          sudo docker-compose rm backend
           rm .env -f
           touch .env
           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
