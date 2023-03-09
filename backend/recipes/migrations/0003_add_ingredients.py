@@ -7,7 +7,7 @@ from django.db import migrations, transaction
 @transaction.atomic
 def add_ingredients(apps, shema_editor):
     Ingredient = apps.get_model('recipes', 'Ingredient')
-    with open('../data/ingredients.json', encoding='utf-8') as t:
+    with open('../../data/ingredients.json', encoding='utf-8') as t:
         ingrs = json.load(t)
     for ing in range(len(ingrs)):
         Ingredient.objects.create(

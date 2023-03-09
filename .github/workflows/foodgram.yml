@@ -71,8 +71,8 @@ jobs:
         stack_file_name: docker-compose.yaml
         script: |
           cd infra
-          sudo docker pull nadim13/foodgram_backend:v1
-          sudo docker pull nadim13/foodgram_frontend:v1
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
           sudo docker-compose stop
           sudo docker-compose rm backend -f
           rm .env -f
@@ -84,8 +84,7 @@ jobs:
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo ALLOWED_HOSTS_HOST=${{ secrets.ALLOWED_HOSTS_HOST }} >> .env
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-          sudo docker-compose pull
-          sudo docker-compose up -d --build
+          sudo docker-compose up -d 
           sudo docker image prune -f
   send_message:
     runs-on: ubuntu-latest
