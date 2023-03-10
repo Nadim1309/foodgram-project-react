@@ -271,7 +271,7 @@ class Api {
   }) {
     const token = localStorage.getItem('token')
     return fetch(
-      t`/api/users/subscriptions/?page=${page}&limit=${limit}&recipes_limit=${recipes_limit}`,
+      `/api/users/subscriptions/?page=${page}&limit=${limit}&recipes_limit=${recipes_limit}`,
       {
         method: 'GET',
         headers: {
