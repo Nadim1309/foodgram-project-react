@@ -16,8 +16,8 @@ services:
   backend:
     image: nadim13/foodgram_backend:v1
     container_name: backend
-    expose:
-      - 8000
+    ports:
+      - "8000:8000"
     restart: always
     volumes:
       - static_value:/app/backend_static/
