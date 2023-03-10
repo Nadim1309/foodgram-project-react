@@ -20,8 +20,8 @@ services:
       - 8000
     restart: always
     volumes:
-      - static_value:/app/backend_static/
-      - media_value:/app/backend_media/
+      - static_value:/app/static/
+      - media_value:/app/media/
     depends_on:
       - db
     env_file:
@@ -29,7 +29,7 @@ services:
 
   frontend:
     image: nadim13/foodgram_frontend:v1
-    container_name: frontand
+    container_name: frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
