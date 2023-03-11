@@ -25,7 +25,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./.env
 
   frontend:
     image: nadim13/foodgram_frontend:v1
