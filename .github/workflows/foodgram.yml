@@ -70,11 +70,11 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           stack_file_name: docker-compose.yaml
           script: |
-            cd infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:v1
             sudo docker-compose stop
             sudo docker-compose rm backend
+            sudo docker-compose rm frontend
             sudo rm .env
             touch .env 
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
