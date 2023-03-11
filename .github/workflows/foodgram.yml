@@ -56,6 +56,7 @@ jobs:
           tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_backend:v1
          
   deploy:
+    cd ./infra
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
@@ -71,8 +72,8 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
           sudo docker-compose stop
-          sudo docker-compose rm backend
-          rm .env 
+          sudo docker-compose rm backend -f
+          rm .env -f
           touch .env
           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
           echo DB_NAME=${{ secrets.DB_NAME }} >> .env
