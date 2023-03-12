@@ -71,10 +71,10 @@ jobs:
         stack_file_name: docker-compose.yml
         script: |
           cd foodgram-project-react/infra/
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:v1.0.0
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1.0.0
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:v1
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1
           sudo docker-compose stop
-          sudo docker-compose rm backend -f
+          sudo docker-compose rm backend 
           sudo rm .env
           touch .env 
           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -83,7 +83,7 @@ jobs:
           echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-          sudo docker-compose up 
+          sudo docker-compose up --build
           sudo docker image prune -f
 
   send_message:
