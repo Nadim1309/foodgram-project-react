@@ -95,6 +95,8 @@ docker-compose exec backend python manage.py createsuperuser
 пароль 130969ndm
 ```
 
-Авторы:
+### Авторы:
+
 [Шакиржанов Надим](https://github.com/Nadim1309) Бекенд для сервиса Foodgram и диплой проекта
+
 [Яндекс.Практикум] Фронтенд для сервиса Foodgram.
