@@ -21,9 +21,7 @@
 
 
 
-
-
-Проект будет доступен по адресу: http://nadim13.hopto.org
+[Работающий проект доступен по адресу]: (http://nadim13.hopto.org)
 
 
 Статус выполнения workflow
@@ -33,7 +31,7 @@
 
 ### КАК ЗАПУСТИТЬ ПРОЕКТ:
 
-Проект запускается в 4 контейнерах:
+проект запускается в 4 контейнерах:
 
 ```
 nginx:1.19.3
@@ -41,9 +39,9 @@ foodgram-backend:v1
 foodgram-frontend:v1
 postgres:11.4
 ```
-контейнер foodgram-frontend:v1 после сборки завервает свою работу
+контейнер foodgram-frontend:v1 после сборки завершает свою работу
 
-Клонируйте репозиторий к себе на сервер
+клонируйте репозиторий к себе на сервер
 
 ```
 git clone https://github.com/Nadim1309/foodgram-project-react.git
@@ -55,11 +53,40 @@ cd foodgram-project-react/infra/
 
 ```
 
-В папке infra создать .env и заполнить дефолтными значениями
+в папке infra создайте файл .env и заполните его дефолтными значениями
+```
 DB_ENGINE=django.db.backends.postgresql_psycopg2
 DB_NAME=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
-В папке infra выполнить
+```
+
+в папке infra выполните команду
+
+```
+docker-compose up --build
+```
+
+запустите миграции
+```
+docker-compose exec backend python manage.py migrate 
+```
+
+наполните сайт тестовыми данными
+```
+docker-compose exec backend python manage.py loaddata dump.json
+```
+соберите статические файлы
+```
+docker-compose exec backend python manage.py collectstatic --no-input 
+```
+создайте суперпользователя
+```
+docker-compose exec backend python manage.py createsuperuser 
+```
+Авторы:
+
+
+[Шакиржанов Надим](https://github.com/Nadim1309)
