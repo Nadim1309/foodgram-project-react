@@ -33,7 +33,7 @@
 
 ### КАК ЗАПУСТИТЬ ПРОЕКТ:
 
-Проект работает в 4 контейнерах:
+Проект запускается в 4 контейнерах:
 
 ```
 nginx:1.19.3
@@ -41,3 +41,25 @@ foodgram-backend:v1
 foodgram-frontend:v1
 postgres:11.4
 ```
+контейнер foodgram-frontend:v1 после сборки завервает свою работу
+
+Клонируйте репозиторий к себе на сервер
+
+```
+git clone https://github.com/Nadim1309/foodgram-project-react.git
+```
+Перейдите в папку infra
+
+```
+cd foodgram-project-react/infra/
+
+```
+
+В папке infra создать .env и заполнить дефолтными значениями
+DB_ENGINE=django.db.backends.postgresql_psycopg2
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+В папке infra выполнить

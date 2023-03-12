@@ -70,6 +70,7 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         stack_file_name: docker-compose.yml
         script: |
+          cd foodgram-project-react/infra/
           sudo docker-compose stop 
           sudo docker rm backend 
           rm .env -f
