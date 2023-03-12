@@ -73,7 +73,7 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         stack_file_name: docker-compose.yml
         script: |
-          cd ./infra
+          cd ../infra
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker rm backend -f
@@ -85,7 +85,7 @@ jobs:
           echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-          sudo docker-compose up --rm
+          sudo docker-compose up 
           sudo docker image prune -f
 
   send_message:
