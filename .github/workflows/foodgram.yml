@@ -73,7 +73,7 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         stack_file_name: docker-compose.yml
         script: |
-          cd ../infra
+          cd infra
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:v1
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker rm backend -f
