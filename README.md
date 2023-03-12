@@ -58,7 +58,7 @@ cd foodgram-project-react/infra/
 DB_ENGINE=django.db.backends.postgresql_psycopg2
 DB_NAME=postgres
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
+POSTGRES_PASSWORD=(xxxxxxx - пароль вашей базы)
 DB_HOST=db
 DB_PORT=5432
 ```
