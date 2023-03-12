@@ -29,3 +29,15 @@
 Статус выполнения workflow
 
 ![example workflow](https://github.com/nadim1309/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg)
+
+
+### КАК ЗАПУСТИТЬ ПРОЕКТ:
+
+Проект работает в 4 контейнерах:
+
+```
+nginx:1.19.3
+foodgram-backend:v1
+foodgram-frontend:v1
+postgres:11.4
+```
