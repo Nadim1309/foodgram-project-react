@@ -86,6 +86,15 @@ docker-compose exec backend python manage.py collectstatic --no-input
 ```
 docker-compose exec backend python manage.py createsuperuser 
 ```
+
+### Доступ в админку
+
+```
+admin
+admin@yandex.ru
+130969ndm
+```
+
 Авторы:
 
 
