@@ -99,4 +99,4 @@ docker-compose exec backend python manage.py createsuperuser
 
 [Шакиржанов Надим](https://github.com/Nadim1309) Бекенд для сервиса Foodgram и диплой проекта
 
-[Яндекс.Практикум] Фронтенд для сервиса Foodgram.
+[Яндекс.Практикум](https://github.com/yandex-praktikum/foodgram-project-react)Фронтенд для сервиса Foodgram.
