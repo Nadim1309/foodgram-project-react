@@ -71,8 +71,10 @@ jobs:
         stack_file_name: docker-compose.yml
         script: |
           cd foodgram-project-react/infra/
-          sudo docker-compose stop 
-          sudo docker rm backend 
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:v1.0.0
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1.0.0
+          sudo docker-compose stop
+          sudo docker-compose rm backend
           rm .env -f
           touch .env
           echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
